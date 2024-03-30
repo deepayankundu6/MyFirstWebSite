@@ -5,8 +5,7 @@ jspm_packages
 # Terraform directories
 .env
 .terraform
-lambda.zip
-errored.tfstate
 .terraform.lock.hcl
-*.tfstate
 tf_resource_plan.out
+**.tfstate
+**.tfstate.**
