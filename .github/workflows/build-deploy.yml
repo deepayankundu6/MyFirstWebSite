@@ -41,7 +41,7 @@ jobs:
             echo "Deploying started."
             terraform init -backend-config=backend.conf
             terraform fmt
-            terraform plan
+            terraform plan -var-file="deploy.tfvars"
             terraform apply -auto-approve           
             echo "Deployment completed successsfully"            
       - name: Removing credentials
