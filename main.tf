@@ -4,23 +4,23 @@ resource "aws_s3_bucket" "static" {
 
 resource "aws_s3_bucket_acl" "static" {
   bucket     = aws_s3_bucket.static.id
-  acl        = "private"
-  depends_on = [aws_s3_bucket_ownership_controls.meta_static_resources]
+  acl        = "public-read"
+  depends_on = [aws_s3_bucket_ownership_controls.meta_static_resources, aws_s3_bucket_public_access_block.website_bucket_public_access_block]
 }
 
 resource "aws_s3_bucket_public_access_block" "website_bucket_public_access_block" {
   bucket                  = aws_s3_bucket.static.id
-  ignore_public_acls      = true
-  block_public_acls       = true
-  restrict_public_buckets = true
-  block_public_policy     = true
+  ignore_public_acls      = false
+  block_public_acls       = false
+  restrict_public_buckets = false
+  block_public_policy     = false
 }
 
 resource "aws_s3_bucket_ownership_controls" "meta_static_resources" {
   bucket = aws_s3_bucket.static.bucket
 
   rule {
-    object_ownership = "BucketOwnerEnforced"
+    object_ownership = "BucketOwnerPreferred"
   }
 }
 
@@ -47,12 +47,12 @@ resource "aws_s3_bucket_website_configuration" "static" {
 }
 
 resource "aws_s3_object" "assets" {
-  for_each = fileset("${path.module}/../Website", "**")
+  for_each = fileset("${path.module}/Website", "**")
 
   bucket = aws_s3_bucket.static.id
   key    = each.value
-  source = "${path.module}/../Website/${each.value}"
-  etag   = filemd5("${path.module}/../Website/${each.value}")
+  source = "${path.module}/Website/${each.value}"
+  etag   = filemd5("${path.module}/Website/${each.value}")
 
   content_type = lookup(
     local.content_type_map,
