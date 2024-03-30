@@ -39,8 +39,8 @@ jobs:
       - name: Deploying function into AWS
         run: |
             echo "Deploying started."
-            terraform init -backend-config=tf_backend.conf
             terraform fmt
+            terraform init -backend-config=tf_backend.conf
             terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out
             terraform apply -auto-approve "tf_resource_plan.out"           
             echo "Deployment completed successsfully"            
