@@ -7,3 +7,8 @@ variable "s3_bucket_name" {
   type        = string
   description = "Bucket name for storing the website"
 }
+
+variable "index_file_name" {
+  type        = string
+  description = "Bucket name for storing the website"
+}

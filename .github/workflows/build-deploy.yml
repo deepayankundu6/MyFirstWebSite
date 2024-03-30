@@ -41,8 +41,8 @@ jobs:
             echo "Deploying started."
             terraform init -backend-config=backend.conf
             terraform fmt
-            terraform plan -var-file="deploy.tfvars"
-            terraform apply -auto-approve           
+            terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out
+            terraform apply -auto-approve "tf_resource_plan.out"           
             echo "Deployment completed successsfully"            
       - name: Removing credentials
         run: | 
