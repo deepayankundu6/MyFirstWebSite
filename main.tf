@@ -15,7 +15,7 @@ resource "aws_s3_bucket_policy" "open_access" {
         Effect    = "Allow"
         Principal = "*"
         Action    = ["s3:GetObject"]
-        Resource  = "${aws_s3_bucket.static.arn}/${var.index_file_name}"
+        Resource  = "${aws_s3_bucket.static.arn}/*"
       },
     ]
   })
