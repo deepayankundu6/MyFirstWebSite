@@ -11,15 +11,15 @@ resource "aws_s3_bucket_policy" "open_access" {
     Id      = "Public_access"
     Statement = [
       {
-        Sid = "IPAllow"
-        Effect = "Allow"
+        Sid       = "IPAllow"
+        Effect    = "Allow"
         Principal = "*"
-        Action = ["s3:GetObject"]
-        Resource = "${aws_s3_bucket.static.arn}/${var.index_file_name}"
+        Action    = ["s3:GetObject"]
+        Resource  = "${aws_s3_bucket.static.arn}/${var.index_file_name}"
       },
     ]
   })
-  depends_on = [ aws_s3_bucket_public_access_block.website_bucket_public_access_block ]
+  depends_on = [aws_s3_bucket_public_access_block.website_bucket_public_access_block]
 }
 
 resource "aws_s3_bucket_acl" "static" {
@@ -83,8 +83,4 @@ resource "aws_s3_object" "assets" {
     split(".", basename(each.value))[length(split(".", basename(each.value))) - 1],
     "application/octet-stream",
   )
-}
-
-output "website_url" {
-  value = "http://${aws_s3_bucket.static.bucket}.s3-website.${aws_s3_bucket.static.region}.amazonaws.com"
 }
