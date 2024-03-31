@@ -17,7 +17,7 @@ resource "aws_s3_bucket_public_access_block" "website_bucket_public_access_block
 }
 
 resource "aws_s3_bucket_ownership_controls" "meta_static_resources" {
-  bucket = aws_s3_bucket.static.bucket
+  bucket = aws_s3_bucket.static.id
 
   rule {
     object_ownership = "BucketOwnerPreferred"
