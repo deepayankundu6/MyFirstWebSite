@@ -43,10 +43,10 @@ jobs:
           echo "Initialization completed."  
       - name: Validating and planning changes
         run: |
-            echo " Validating terraform scripts and planning"
-            terraform validate                
-            terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out  
-            echo "Validation and plan completed successfully"  
+          echo " Validating terraform scripts and planning"
+          terraform validate                
+          terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out  
+          echo "Validation and plan completed successfully"  
       - name: Deploying changes into AWS using terraform
         run: | 
           echo "Deployment started."
