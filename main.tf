@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "static" {
-  bucket = var.s3_bucket_name
+  bucket        = var.s3_bucket_name
   force_destroy = true
 }
 
@@ -33,7 +33,7 @@ locals {
     jpg : "image/jpeg"
     gif : "image/gif"
     png : "image/png"
-    html: "application/xhtml+xml"
+    html : "application/xhtml+xml"
   }
 }
 
