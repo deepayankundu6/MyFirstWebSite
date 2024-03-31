@@ -40,11 +40,16 @@ jobs:
         run: |     
                 terraform --version       
                 terraform init -backend-config=tf_backend.conf  
-                echo "Initialization completed."             
+                echo "Initialization completed."     
+      - name: terraform validate and plan
+        run: | 
+            echo " Validating and planning the changes
+            terraform validate                
+            terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out  
+            echo "Validation and plan completed successfully"  
       - name: Deploying into AWS using terraform
         run: |
             echo "Deploying started."
-            terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out
             terraform apply -auto-approve "tf_resource_plan.out"           
             echo "Deployment completed successsfully"   
 
