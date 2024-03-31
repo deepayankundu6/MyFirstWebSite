@@ -86,5 +86,5 @@ resource "aws_s3_object" "assets" {
 }
 
 output "website_url" {
-  value = "http://${aws_s3_bucket.terraform-demo-43234.bucket}.s3-website.${aws_s3_bucket.terraform-demo-43234.region}.amazonaws.com"
+  value = "http://${aws_s3_bucket.static.bucket}.s3-website.${aws_s3_bucket.static.region}.amazonaws.com"
 }
