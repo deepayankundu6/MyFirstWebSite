@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "static" {
   bucket = var.s3_bucket_name
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "static" {
@@ -27,8 +28,12 @@ resource "aws_s3_bucket_ownership_controls" "meta_static_resources" {
 locals {
   content_type_map = {
     css : "text/css; charset=UTF-8"
-    js : "text/js; charset=UTF-8"
+    js : "text/javascript; charset=UTF-8"
     svg : "image/svg+xml"
+    jpg : "image/jpeg"
+    gif : "image/gif"
+    png : "image/png"
+    html: "application/xhtml+xml"
   }
 }
 
@@ -47,16 +52,16 @@ resource "aws_s3_bucket_website_configuration" "static" {
 }
 
 resource "aws_s3_object" "assets" {
-  for_each = fileset("${path.module}/Website", "**")
+  for_each = fileset("${path.module}${var.website_folder}", "*")
 
   bucket = aws_s3_bucket.static.id
   key    = each.value
-  source = "${path.module}/Website/${each.value}"
-  etag   = filemd5("${path.module}/Website/${each.value}")
+  source = "${path.module}${var.website_folder}/${each.value}"
+  etag   = filemd5("${path.module}${var.website_folder}/${each.value}")
 
   content_type = lookup(
     local.content_type_map,
     split(".", basename(each.value))[length(split(".", basename(each.value))) - 1],
-    "text/html; charset=UTF-8",
+    "application/octet-stream",
   )
 }
