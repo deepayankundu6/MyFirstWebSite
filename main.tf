@@ -3,6 +3,25 @@ resource "aws_s3_bucket" "static" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_policy" "open_access" {
+  bucket = aws_s3_bucket.static.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "Public_access"
+    Statement = [
+      {
+        Sid = "IPAllow"
+        Effect = "Allow"
+        Principal = "*"
+        Action = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.static.arn}/${var.index_file_name}"
+      },
+    ]
+  })
+  depends_on = [ aws_s3_bucket_public_access_block.website_bucket_public_access_block ]
+}
+
 resource "aws_s3_bucket_acl" "static" {
   bucket     = aws_s3_bucket.static.id
   acl        = "public-read"
