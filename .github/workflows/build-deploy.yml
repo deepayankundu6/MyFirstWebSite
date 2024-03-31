@@ -35,15 +35,19 @@ jobs:
         run: |
           echo "AWS_ACCESS_KEY_ID=$(jq -r '.aws_access_key_id' data.json)" >> "$GITHUB_ENV"    
           echo "AWS_SESSION_TOKEN=$(jq -r '.aws_session_token' data.json)" >> "$GITHUB_ENV"   
-          echo "AWS_SECRET_ACCESS_KEY=$(jq -r '.aws_secret_access_key' data.json)" >> "$GITHUB_ENV"                  
-      - name: Deploying function into AWS
+          echo "AWS_SECRET_ACCESS_KEY=$(jq -r '.aws_secret_access_key' data.json)" >> "$GITHUB_ENV"     
+      - name: Terraofrm version and initialization
+        run: |     
+                terraform --version       
+                terraform init -backend-config=tf_backend.conf  
+                echo "Initialization completed."             
+      - name: Deploying into AWS using terraform
         run: |
             echo "Deploying started."
-            terraform fmt
-            terraform init -backend-config=tf_backend.conf
             terraform plan -var-file="deploy.tfvars" -out tf_resource_plan.out
             terraform apply -auto-approve "tf_resource_plan.out"           
-            echo "Deployment completed successsfully"            
+            echo "Deployment completed successsfully"   
+
       - name: Removing credentials
         run: | 
           echo "Removing credentials"
